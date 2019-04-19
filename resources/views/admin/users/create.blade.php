@@ -4,7 +4,7 @@
     <h1 class="text-center">
         create users page
     </h1>
-    <form method="POST" action="/admin/user" enctype="multipart/form-data">
+    <form method="POST" action="/admin/users" enctype="multipart/form-data">
         {{csrf_field()}}
         {{ method_field('POST') }}
 
@@ -17,7 +17,7 @@
             <input type="email" class="form-control" id="email" placeholder="email" name="email">
         </div>
         <div class="form-group">
-            <label for="Password">؛Password</label>
+            <label for="Password">Password</label>
             <input type="Password" class="form-control" id="Password" placeholder="Password" name="password">
         </div>
         <div class="form-group">
