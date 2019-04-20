@@ -7,6 +7,7 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UsersEditRequest;
 use App\Http\Requests;
 
 class AdminUserController extends Controller
@@ -51,14 +52,14 @@ class AdminUserController extends Controller
         $input = $request->all();
 
         if ($file =  $request->file('photo_id')){
-            $name  = time().$file->getClientOriginalName();
+            $name  = "/images/". time().$file->getClientOriginalName();
             $file->move('images' , $name);
             $photo =  Photo::create(['path'=>$name]);
             $input['photo_id'] = $photo->id;
         }
         $input['password'] = bcrypt($request->password);
         User::create($input);
-//        return redirect('/admin/user');
+        return redirect('/admin/users');
     }
 
     /**
@@ -81,6 +82,9 @@ class AdminUserController extends Controller
     public function edit($id)
     {
         //
+        $roles = Role::all();
+        $user =   User::findOrFail($id);
+        return view('admin.users.edit' , compact(['user','roles']));
     }
 
     /**
@@ -90,9 +94,27 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
         //
+        $user = User::findOrFail($id);
+        if (empty($request->password)){
+            $input  = $request->except('password');
+        } else{
+            $input = $request->all();
+            $input['password'] = bcrypt($request->password);
+        }
+
+        $input = $request->all();
+        if($file= $request->file('photo_id')){
+            $name = "/images/".time().$file->getClientOriginalName();
+            $file->move('images' ,$name);
+            $photo = Photo::create(['path'=>$name]);
+            $input['photo_id'] = $photo->id;
+        }
+        $user->update($input);
+        return redirect('/admin/users');
+//        return $request->all();
     }
 
     /**
