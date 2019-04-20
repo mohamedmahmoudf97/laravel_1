@@ -1,6 +1,21 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if (Session::has('session_delete'))
+        <div class="alert alert-danger">
+            {{session('session_delete')}}
+        </div>
+    @endif
+    @if (Session::has('session_created'))
+        <div class="alert alert-success">
+            {{session('session_created')}}
+        </div>
+    @endif
+    @if (Session::has('session_updated'))
+        <div class="alert alert-warning">
+            {{session('session_updated')}}
+        </div>
+    @endif
 <h1 class="text-center">users</h1>
 <table class="table">
     <thead class="thead-dark">

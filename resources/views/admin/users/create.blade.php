@@ -31,7 +31,7 @@
         <div class="form-group">
             <label for="Active">Active</label>
             <select class="custom-select form-control" id="Active" name="is_active">
-                <option  vlaue="1">Active</option>
+                <option  value="1">Active</option>
                 <option selected value="0">Not Active</option>
             </select>
         </div>

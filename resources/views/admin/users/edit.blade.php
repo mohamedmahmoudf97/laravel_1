@@ -51,9 +51,17 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    </div><form method="POST" action="/admin/users/{{$user->id}}" enctype="multipart/form-data">
+            {{csrf_field()}}
+            {{ method_field('DELETE') }}
+            <div class="form-group">
+                <input type="submit" value="delete" class="btn btn-danger">
+            </div>
+        </form>
     </div>
-    </div>
-<div class="row mt-2">
+
+        <div class="row mt-2">
     @include('includes.form_error')
 </div>
 

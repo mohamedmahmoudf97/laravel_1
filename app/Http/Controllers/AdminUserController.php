@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UsersEditRequest;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Session;
 
 class AdminUserController extends Controller
 {
@@ -52,13 +53,15 @@ class AdminUserController extends Controller
         $input = $request->all();
 
         if ($file =  $request->file('photo_id')){
-            $name  = "/images/". time().$file->getClientOriginalName();
+            $name  = time().$file->getClientOriginalName();
             $file->move('images' , $name);
             $photo =  Photo::create(['path'=>$name]);
             $input['photo_id'] = $photo->id;
         }
         $input['password'] = bcrypt($request->password);
         User::create($input);
+        Session::flash('session_created', 'user has been created');
+
         return redirect('/admin/users');
     }
 
@@ -107,11 +110,12 @@ class AdminUserController extends Controller
 
         $input = $request->all();
         if($file= $request->file('photo_id')){
-            $name = "/images/".time().$file->getClientOriginalName();
+            $name = time().$file->getClientOriginalName();
             $file->move('images' ,$name);
             $photo = Photo::create(['path'=>$name]);
             $input['photo_id'] = $photo->id;
         }
+        Session::flash('session_updated', 'user has been updated');
         $user->update($input);
         return redirect('/admin/users');
 //        return $request->all();
@@ -126,5 +130,18 @@ class AdminUserController extends Controller
     public function destroy($id)
     {
         //
-    }
+        $user  = User::findOrFail($id);
+        if ($user->photo_id !== ''){
+        unlink(public_path().$user->photo->path);
+        $user->delete();
+            Session::flash('session_delete', 'user has been deleted');
+            return redirect('/admin/users');
+
+        }else{
+            $user->delete();
+            Session::flash('session_delete', 'user has been deleted');
+            return redirect('/admin/users');
+
+        }
+        }
 }
