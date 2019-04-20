@@ -16,9 +16,9 @@
         <div class="form-group">
             <label for="category">Category</label>
             <select class="custom-select form-control" id="category" name="category_id">
-{{--                @foreach($roles as $role)--}}
-                    <option value="1">php</option>
-{{--                @endforeach--}}
+                @foreach($category as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">
